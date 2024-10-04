@@ -41,25 +41,28 @@ const entryPoint = document.querySelector('.entry');
 // Use this function to build a Card, and append it to the entry point.
 function dogCardMaker({ imageURL, breed }) {
   // instantiating the elements
-  const dogCard = document.createElement('div')
-  const image = document.createElement('img')
-  const heading = document.createElement('h3')
+  const dogCard = document.createElement('div');
+  const image = document.createElement('img');
+  const heading = document.createElement('h3');
+
   // setting class names, attributes and text
-  heading.textContent = `Breed: ${breed}`
-  image.src = imageURL
-  image.classList.add('dog-image')
-  dogCard.classList.add('dog-card')
+  heading.textContent = `Breed: ${breed}`;
+  image.src = imageURL;
+  image.classList.add('dog-image');
+  dogCard.classList.add('dog-card');
+
   // creating the hierarchy
-  dogCard.appendChild(image)
-  dogCard.appendChild(heading)
+  dogCard.appendChild(image);
+  dogCard.appendChild(heading);
+
   // adding some interactivity
   dogCard.addEventListener('click', () => {
-    dogCard.classList.toggle('selected')
+    dogCard.classList.toggle('selected');
   })
+  
   // never forget to return!
   return dogCard
 }
-
 
 // 👉 TASK 4- Bring the Axios library into the project using one of two methods:
 //    * Traditional way: put another script tag inside index.html (`https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js`)
@@ -71,9 +74,11 @@ function dogCardMaker({ imageURL, breed }) {
 //    * ON FAILURE: log the error to the console
 //    * IN ANY CASE: log "done" to the console
 axios
-  .get('https://dog.ceo/api/breed/{breed}/images/random/{number}')
+  .get('https://dog.ceo/api/breeds/image/random')
   .then((res) => {
-    console.log(res.data);
+    console.log('Message:', res.data.message);
+    let imageURL = res.data.message;
+    entryPoint.appendChild(dogCardMaker(`${imageURL}`, 'Breed'));
     console.log('done');
     // response
   })
