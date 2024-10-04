@@ -1,6 +1,7 @@
 // Imports at the top of the file!
 // We never nest imports inside blocks of code!
-
+import axios from "axios";
+import { breeds } from "./breeds";
 
 // 👉 TASK 1- Test out the following endpoints:
 
@@ -11,16 +12,30 @@
 //  https://lambda-times-api.herokuapp.com/breeds
 //  https://dog.ceo/api/breeds/image/random
 
+const endpoints = [
+  'https://lambda-times-api.herokuapp.com/friends',
+  'https://lambda-times-api.herokuapp.com/friends/1',
+  'https://lambda-times-api.herokuapp.com/quotes',
+  'https://lambda-times-api.herokuapp.com/cards',
+  'https://lambda-times-api.herokuapp.com/breeds',
+  'https://dog.ceo/api/breeds/image/random'
+];
+
 //  * With HTTPie (command-line HTTP Client)
 //  * With Postman (HTTP Client with GUI)
 //  * With Chrome and the Network Tab
 //  * With JS using the native fetch [STRETCH]
 
+// endpoints.forEach(endpoint => {
+//   fetch(endpoint)
+//     .then(res => res.json())
+//     .then(data => console.log(data))
+//     .catch(error => console.error('Error fetching endpoint:', error));
+// });
 
 // 👉 TASK 2- Select the "entry point", the element
 // inside of which we'll inject our dog cards 
-const entryPoint = null
-
+const entryPoint = document.querySelector('.entry');
 
 // 👉 TASK 3- `dogCardMaker` takes an object and returns a Dog Card.
 // Use this function to build a Card, and append it to the entry point.
@@ -55,6 +70,17 @@ function dogCardMaker({ imageURL, breed }) {
 //    * ON SUCCESS: use the data to create dogCards and append them to the entry point
 //    * ON FAILURE: log the error to the console
 //    * IN ANY CASE: log "done" to the console
+axios
+  .get('https://dog.ceo/api/breed/{breed}/images/random/{number}')
+  .then((res) => {
+    console.log(res.data);
+    console.log('done');
+    // response
+  })
+  .catch((error) => {
+    console.error('Error fetching dogs:', error);
+    console.log('done');
+  });
 
 
 // 👉 (OPTIONAL) TASK 6- Wrap the fetching operation inside a function `getDogs`
