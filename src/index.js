@@ -1,7 +1,7 @@
 // Imports at the top of the file!
 // We never nest imports inside blocks of code!
 import axios from "axios";
-import { breeds } from "./breeds";
+import { breeds } from "./breeds.js";
 
 // 👉 TASK 1- Test out the following endpoints:
 
@@ -12,14 +12,14 @@ import { breeds } from "./breeds";
 //  https://lambda-times-api.herokuapp.com/breeds
 //  https://dog.ceo/api/breeds/image/random
 
-const endpoints = [
-  'https://lambda-times-api.herokuapp.com/friends',
-  'https://lambda-times-api.herokuapp.com/friends/1',
-  'https://lambda-times-api.herokuapp.com/quotes',
-  'https://lambda-times-api.herokuapp.com/cards',
-  'https://lambda-times-api.herokuapp.com/breeds',
-  'https://dog.ceo/api/breeds/image/random'
-];
+// const endpoints = [
+//   'https://lambda-times-api.herokuapp.com/friends',
+//   'https://lambda-times-api.herokuapp.com/friends/1',
+//   'https://lambda-times-api.herokuapp.com/quotes',
+//   'https://lambda-times-api.herokuapp.com/cards',
+//   'https://lambda-times-api.herokuapp.com/breeds',
+//   'https://dog.ceo/api/breeds/image/random'
+// ];
 
 //  * With HTTPie (command-line HTTP Client)
 //  * With Postman (HTTP Client with GUI)
@@ -47,7 +47,7 @@ function dogCardMaker({ imageURL, breed }) {
 
   // setting class names, attributes and text
   heading.textContent = `Breed: ${breed}`;
-  image.src = imageURL;
+  image.src = `${imageURL}`;
   image.classList.add('dog-image');
   dogCard.classList.add('dog-card');
 
@@ -59,9 +59,9 @@ function dogCardMaker({ imageURL, breed }) {
   dogCard.addEventListener('click', () => {
     dogCard.classList.toggle('selected');
   })
-  
+
   // never forget to return!
-  return dogCard
+  entryPoint.appendChild(dogCard);
 }
 
 // 👉 TASK 4- Bring the Axios library into the project using one of two methods:
@@ -73,20 +73,27 @@ function dogCardMaker({ imageURL, breed }) {
 //    * ON SUCCESS: use the data to create dogCards and append them to the entry point
 //    * ON FAILURE: log the error to the console
 //    * IN ANY CASE: log "done" to the console
-axios
-  .get('https://dog.ceo/api/breeds/image/random')
-  .then((res) => {
-    console.log('Message:', res.data.message);
-    let imageURL = res.data.message;
-    entryPoint.appendChild(dogCardMaker(`${imageURL}`, 'Breed'));
-    console.log('done');
-    // response
-  })
-  .catch((error) => {
-    console.error('Error fetching dogs:', error);
-    console.log('done');
-  });
 
+const getDogs = (number) => {
+  // let number = 
+  console.log(breeds);
+  
+  breeds.forEach(breed => {
+    console.log('Dog', breed);
+    axios.get(`https://dog.ceo/api/breed/${breed}/images/random/${number}`)
+      .then((res) => {
+        console.log(res.json);
+        res.data.message.forEach((imageURL) => {
+          dogCardMaker({ imageURL, breed });
+        })
+      })
+      // error handling
+      .catch((error) => {
+      console.error(`Error fetching image for ${breed}:`, error);
+      });
+  });
+}
+getDogs(1);
 
 // 👉 (OPTIONAL) TASK 6- Wrap the fetching operation inside a function `getDogs`
 // that takes a breed and a count (of dogs)
