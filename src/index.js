@@ -74,12 +74,10 @@ function dogCardMaker({ imageURL, breed }) {
 //    * ON FAILURE: log the error to the console
 //    * IN ANY CASE: log "done" to the console
 
-const getDogs = (number) => {
-  // let number = 
-  console.log(breeds);
-  
+const getDogs = () => {
   breeds.forEach(breed => {
-    console.log('Dog', breed);
+    let number = Math.random(Math.floor());
+
     axios.get(`https://dog.ceo/api/breed/${breed}/images/random/${number}`)
       .then((res) => {
         console.log(res.json);
@@ -92,6 +90,7 @@ const getDogs = (number) => {
       console.error(`Error fetching image for ${breed}:`, error);
       });
   });
+  console.log('done');
 }
 getDogs(1);
 
